@@ -1,4 +1,4 @@
-# ⚓ MaritimeCareerIQ — v2.0
+# ⚓ MaritimeCareerIQ 
 ## Maritime Sponsorship & Career Intelligence System
 
 **Full-Stack Web Application | DBMS Mini Project**
@@ -6,26 +6,7 @@
 
 ---
 
-## 🆕 What's New in v2.0
-
-- ✅ **Light cream/white aesthetic** — clean, professional UI
-- ✅ **30 companies** — Maersk, Anglo-Eastern, BW Group, OSM, Chevron, NYK, COSCO, Evergreen, ONE, HMM, CMG, Lloyd, Como, HYP, Hang Wing and many more
-- ✅ **Full eligibility criteria** — PCM, 10th%, 12th%, English%, eyesight, medical, swimming, IMU-CET, age, pathway
-- ✅ **Pending medical** — companies that accept pending clearly marked
-- ✅ **Approved medical doctors** — city-wise doctor list per company
-- ✅ **Complete selection process** — step-by-step with eliminatory rounds marked
-- ✅ **Waiting period** — months between DNS completion and ship joining
-- ✅ **Fleet details** — vessel type breakdown per company (bulk, tanker, LNG, container, etc.)
-- ✅ **Partner colleges** — company-wise college with hostel cost, fee, cutoff rank
-- ✅ **Full financial planner** — investment, stipend, savings, ROI, 3rd officer exam cost
-- ✅ **Salary progression** — DNS → Cadet → 3rd Officer → 2nd Officer → Chief Officer → Captain
-- ✅ **Deadline alert system** — Open Now 🟢 / Upcoming 🟡 / Closed 🔴
-- ✅ **Document upload** — browse and upload PDF/JPG files per company
-- ✅ **Candidate location** — city, state captured in profile
-
----
-
-## 📁 Complete Folder Structure
+## Complete Folder Structure
 
 ```
 maritime/
@@ -68,7 +49,7 @@ maritime/
 
 ---
 
-## ⚡ Setup in 5 Steps
+## Setup in 5 Steps
 
 ### Step 1 — Prerequisites
 Make sure you have:
@@ -134,7 +115,7 @@ Visit: **http://localhost:5000**
 
 ---
 
-## 🔑 Demo Login Accounts
+## Demo Login Accounts
 
 | Email | Password | Profile |
 |-------|----------|---------|
@@ -185,7 +166,7 @@ Visit: **http://localhost:5000**
 
 ---
 
-## 🌐 Pages
+## Pages
 
 | Page | URL | What It Does |
 |------|-----|-------------|
@@ -198,7 +179,7 @@ Visit: **http://localhost:5000**
 
 ---
 
-## 🗄️ Database Tables (19 total)
+## Database Tables (19 total)
 
 | # | Table | Purpose |
 |---|-------|---------|
@@ -229,7 +210,7 @@ Visit: **http://localhost:5000**
 
 ---
 
-## 💡 Eligibility Logic (Chapter 6 Core Query)
+## Eligibility Logic (Chapter 6 Core Query)
 
 ```sql
 SELECT sc.company_name, sc.stipend_dns,
@@ -256,7 +237,7 @@ ORDER BY is_eligible DESC, sc.stipend_dns DESC;
 
 ---
 
-## 🚀 Deploy to Railway (Free Hosting)
+## Deploy to Railway (Free Hosting)
 
 1. Push your project to GitHub
 2. Go to [railway.app](https://railway.app) → New Project → Deploy from GitHub
