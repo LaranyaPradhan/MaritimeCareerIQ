@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard — MaritimeCareerIQ</title>
+<link rel="stylesheet" href="css/global.css"/>
+<style>
+body{background:var(--cream);}
+.dash-wrap{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
+.profile-banner{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--radius);padding:2rem;margin-bottom:2rem;display:flex;align-items:center;gap:1.8rem;flex-wrap:wrap;color:var(--white);}
+.avatar{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:var(--white);flex-shrink:0;}
+.profile-info h2{color:var(--white);font-size:1.3rem;margin-bottom:.25rem;}
+.profile-info p{color:rgba(255,255,255,.65);font-size:.85rem;}
+.profile-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem;}
+.p-stats{margin-left:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;}
+.p-stat{text-align:center;}
+.p-stat .n{font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:var(--white);}
+.p-stat .l{font-size:.7rem;color:rgba(255,255,255,.55);}
+.dash-tabs{display:flex;gap:.4rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.dash-tab{padding:.5rem 1.2rem;border-radius:50px;border:1.5px solid var(--card-border);background:var(--white);color:var(--text-mid);cursor:pointer;font-size:.88rem;font-weight:600;font-family:var(--font-body);transition:var(--transition);}
+.dash-tab.active{background:var(--navy);color:var(--white);border-color:var(--navy);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+.app-item{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.3rem;margin-bottom:.8rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;transition:var(--transition);}
+.app-item:hover{border-color:var(--teal-dark);box-shadow:var(--card-shadow);}
+.app-item.sel{border-left:4px solid var(--success);}
+.app-item.rev{border-left:4px solid var(--warning);}
+.app-item.app{border-left:4px solid var(--info);}
+.app-item.rej{border-left:4px solid var(--danger);opacity:.7;}
+.app-co{font-weight:700;font-size:.95rem;color:var(--navy);}
+.app-meta{font-size:.78rem;color:var(--text-muted);margin-top:.2rem;}
+.doc-row{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--cream-mid);}
+.doc-row:last-child{border-bottom:none;}
+.doc-name{font-size:.88rem;font-weight:500;}
+.score-box{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.5rem;text-align:center;box-shadow:var(--card-shadow);}
+.score-val{font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--navy);}
+.score-exam{font-size:.82rem;color:var(--text-muted);margin-bottom:.5rem;}
+.bar-chart{display:flex;flex-direction:column;gap:.9rem;}
+.bar-row{display:flex;align-items:center;gap:1rem;}
+.bar-lbl{width:130px;font-size:.82rem;color:var(--text-mid);text-align:right;}
+.bar-track{flex:1;background:var(--cream-mid);border-radius:50px;height:22px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:50px;display:flex;align-items:center;padding-left:.7rem;font-size:.72rem;font-weight:700;color:var(--white);transition:width .8s ease;}
+.bar-cnt{color:var(--text-muted);font-size:.82rem;min-width:30px;}
+.elig-mini{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius-sm);padding:1rem;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;transition:var(--transition);}
+.elig-mini.yes{border-left:3px solid var(--success);}
+.elig-mini.no{border-left:3px solid #fca5a5;opacity:.65;}
+@media(max-width:768px){.p-stats{margin-left:0;grid-template-columns:repeat(4,1fr);width:100%;}.profile-banner{flex-direction:column;}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a class="brand" href="index.html"><span class="brand-logo">⚓</span><span class="brand-text">Maritime<span class="accent">CareerIQ</span></span></a>
+  <div class="nav-links"><a href="companies.html">Companies</a><a href="eligibility.html">Eligibility</a><a href="financial.html">Finance</a><a href="dashboard.html" class="active">Dashboard</a><button class="btn btn-outline btn-sm" onclick="logout()">Logout</button></div>
+</nav>
+
+<div id="mainLoader" class="loader" style="padding:6rem"><div class="spinner"></div><p style="margin-top:1rem;color:var(--text-muted)">Loading dashboard…</p></div>
+
+<div id="dashMain" class="hidden">
+  <div style="background:var(--white);border-bottom:1.5px solid var(--card-border);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+    <div><h2 style="font-family:var(--font-display);color:var(--navy)">Welcome back, <span id="d_firstname" style="color:var(--teal-dark)">—</span> 👋</h2>
+    <p style="color:var(--text-muted);font-size:.88rem" id="d_subtitle">—</p></div>
+    <div style="display:flex;gap:.8rem">
+      <button class="btn btn-teal" onclick="location.href='companies.html'">Browse Companies</button>
+      <button class="btn btn-outline" onclick="location.href='tracker.html'">Apply Now</button>
+    </div>
+  </div>
+
+  <div class="dash-wrap">
+    <!-- Profile Banner -->
+    <div class="profile-banner">
+      <div class="avatar" id="d_avatar">—</div>
+      <div class="profile-info">
+        <h2 id="d_name">—</h2>
+        <p id="d_inst">—</p>
+        <div class="profile-tags" id="d_tags"></div>
+      </div>
+      <div class="p-stats">
+        <div class="p-stat"><div class="n" id="d_pcm">—</div><div class="l">PCM %</div></div>
+        <div class="p-stat"><div class="n" id="d_rank">—</div><div class="l">IMU Rank</div></div>
+        <div class="p-stat"><div class="n" id="d_agg">—</div><div class="l">Aggregate %</div></div>
+        <div class="p-stat"><div class="n" id="d_appsCount">—</div><div class="l">Applications</div></div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid-4" style="margin-bottom:1.8rem">
+      <div class="stat-box"><div class="num" id="s_total">—</div><div class="label">Total Applications</div></div>
+      <div class="stat-box"><div class="num" style="color:var(--success)" id="s_sel">—</div><div class="label">Selected</div></div>
+      <div class="stat-box"><div class="num" style="color:var(--warning)" id="s_rev">—</div><div class="label">Under Review</div></div>
+      <div class="stat-box"><div class="num" style="color:var(--teal-dark)" id="s_docs">—</div><div class="label">Docs Verified</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchTab('applications')">📋 Applications</button>
+      <button class="dash-tab" onclick="switchTab('eligibility')">✅ Eligibility</button>
+      <button class="dash-tab" onclick="switchTab('documents')">📂 Documents</button>
+      <button class="dash-tab" onclick="switchTab('scores')">📊 Exam Scores</button>
+      <button class="dash-tab" onclick="switchTab('analytics')">📈 Analytics</button>
+    </div>
+
+    <!-- Applications -->
+    <div id="tab_applications" class="tab-pane active">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <h3 style="color:var(--navy)">My Applications</h3>
+        <button class="btn btn-primary btn-sm" onclick="location.href='tracker.html'">+ New Application</button>
+      </div>
+      <div id="appsList"></div>
+    </div>
+
+    <!-- Eligibility -->
+    <div id="tab_eligibility" class="tab-pane">
+      <h3 style="color:var(--navy);margin-bottom:1rem">Eligible Companies Based on Your Profile</h3>
+      <div id="eligList"><div class="loader"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- Documents -->
+    <div id="tab_documents" class="tab-pane">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <h3 style="color:var(--navy)">Document Verification</h3>
+        <button class="btn btn-teal btn-sm" onclick="location.href='tracker.html#docs'">Upload Documents</button>
+      </div>
+      <div class="card" id="docList"></div>
+    </div>
+
+    <!-- Scores -->
+    <div id="tab_scores" class="tab-pane">
+      <h3 style="color:var(--navy);margin-bottom:1rem">Exam Scores</h3>
+      <div class="grid-3" id="scoresList"></div>
+    </div>
+
+    <!-- Analytics -->
+    <div id="tab_analytics" class="tab-pane">
+      <h3 style="color:var(--navy);margin-bottom:1.3rem">Platform Analytics</h3>
+      <div class="grid-2">
+        <div class="card"><h4 style="color:var(--text-muted);margin-bottom:1.2rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.8px">Application Status Distribution</h4><div class="bar-chart" id="analyticsChart"></div></div>
+        <div class="card"><h4 style="color:var(--text-muted);margin-bottom:1.2rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.8px">Most Applied Companies</h4><div id="topCompanies"></div></div>
+      </div>
+      <div class="grid-4" style="margin-top:1.3rem">
+        <div class="stat-box"><div class="num" id="an_s">—</div><div class="label">Total Students</div></div>
+        <div class="stat-box"><div class="num" id="an_a">—</div><div class="label">Total Applications</div></div>
+        <div class="stat-box"><div class="num" id="an_c">—</div><div class="label">Companies Listed</div></div>
+        <div class="stat-box"><div class="num" id="an_p">—</div><div class="label">Avg PCM %</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<footer class="footer"><div class="footer-inner">
+  <div class="footer-brand">⚓ MaritimeCareerIQ<p>SRM IST DBMS Mini Project</p></div>
+  <div class="footer-links"><a href="companies.html">Companies</a><a href="eligibility.html">Eligibility</a><a href="tracker.html">Apply</a></div>
+</div></footer>
+
+<script src="js/api.js"></script>
+<script>
+if (!localStorage.getItem('maritime_token')) location.href='index.html';
+let dashData=null,eligLoaded=false,analyticsLoaded=false;
+
+async function loadDashboard(){
+  try{
+    dashData=await api('/students/dashboard');
+    renderDash(dashData);
+    document.getElementById('mainLoader').classList.add('hidden');
+    document.getElementById('dashMain').classList.remove('hidden');
+  }catch(e){
+    if(e.status===401||e.status===403){logout();return;}
+    document.getElementById('mainLoader').innerHTML='<p style="color:var(--danger)">Failed to load. Please refresh.</p>';
+  }
+}
+
+function renderDash(d){
+  const s=d.profile;
+  const init=(s.name||'?').split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('d_firstname').textContent=s.name.split(' ')[0];
+  document.getElementById('d_subtitle').textContent=`${s.academic_pathway} · ${s.institute}${s.city?` · ${s.city}`:''}`;
+  document.getElementById('d_avatar').textContent=init;
+  document.getElementById('d_name').textContent=s.name;
+  document.getElementById('d_inst').textContent=`📍 ${s.institute}${s.city?`, ${s.city}`:''}`;
+  document.getElementById('d_pcm').textContent=s.pcm_percentage+'%';
+  document.getElementById('d_rank').textContent=s.imu_cet_rank||'N/A';
+  document.getElementById('d_agg').textContent=s.aggregate_percentage?s.aggregate_percentage+'%':'N/A';
+  document.getElementById('d_appsCount').textContent=d.stats.total_applications;
+  const tags=[
+    `<span class="badge badge-navy">${s.academic_pathway}</span>`,
+    `<span class="badge ${s.medical_status==='Fit'?'badge-success':s.medical_status==='Pending'?'badge-warning':'badge-danger'}">${s.medical_status}</span>`,
+    s.swimming_certified?'<span class="badge badge-teal">🏊 Swimming</span>':'',
+    s.gender==='Female'?'<span class="badge badge-gold">👩‍✈️ Female Cadet</span>':'',
+  ].filter(Boolean).join('');
+  document.getElementById('d_tags').innerHTML=tags;
+  document.getElementById('s_total').textContent=d.stats.total_applications;
+  document.getElementById('s_sel').textContent=d.stats.selected;
+  document.getElementById('s_rev').textContent=d.stats.under_review;
+  document.getElementById('s_docs').textContent=`${d.stats.docs_verified}/${d.stats.docs_total}`;
+  renderApps(d.applications);
+  renderDocs(d.documents);
+  renderScores(d.exam_scores);
+}
+
+function renderApps(apps){
+  if(!apps.length){
+    document.getElementById('appsList').innerHTML=`<div style="text-align:center;padding:3rem;color:var(--text-muted)"><div style="font-size:3rem">📭</div><h3 style="margin-top:1rem;font-family:var(--font-display);color:var(--navy)">No applications yet</h3><p>Browse companies and submit your first application.</p><button class="btn btn-primary" style="margin-top:1rem" onclick="location.href='tracker.html'">Apply Now</button></div>`;
+    return;
+  }
+  const statusClass={Applied:'app','Under Review':'rev',Selected:'sel',Rejected:'rej'};
+  document.getElementById('appsList').innerHTML=apps.map(a=>`
+    <div class="app-item ${statusClass[a.application_status]||''}">
+      <div><div class="app-co">${a.company_name}</div>
+      <div class="app-meta">🌍 ${a.country} · Stipend ₹${fmt(a.stipend_dns)}/mo · Applied ${fmtDate(a.applied_at)}
+      ${a.interview_date?`<br>🗓 Interview: <strong>${fmtDate(a.interview_date)}</strong>`:''}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.4rem">
+        ${statusBadge(a.application_status)}
+        <span style="font-size:.75rem;color:var(--text-muted)">${a.bond_years}yr bond</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderDocs(docs){
+  if(!docs.length){document.getElementById('docList').innerHTML='<p class="text-muted" style="padding:1.5rem;text-align:center">No documents uploaded yet. Go to Tracker to upload.</p>';return;}
+  const v=docs.filter(d=>d.verification_status==='Verified').length;
+  document.getElementById('docList').innerHTML=`
+    <div style="margin-bottom:1rem"><div style="display:flex;justify-content:space-between;margin-bottom:.4rem"><span style="font-size:.82rem;color:var(--text-muted)">Verification Progress</span><span style="font-size:.82rem;color:var(--teal-dark);font-weight:700">${v}/${docs.length}</span></div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(v/docs.length*100)}%"></div></div></div>
+    ${docs.map(d=>`<div class="doc-row"><div class="doc-name">📄 ${d.document_name}${d.file_name?`<span style="font-size:.72rem;color:var(--text-muted);margin-left:.5rem">${d.file_name}</span>`:''}</div><div style="display:flex;align-items:center;gap:.6rem"><span class="text-muted">${fmtDate(d.submitted_at)}</span>${verifyBadge(d.verification_status)}</div></div>`).join('')}`;
+}
+
+function renderScores(scores){
+  if(!scores.length){document.getElementById('scoresList').innerHTML='<p class="text-muted" style="grid-column:1/-1;text-align:center;padding:2rem">No exam scores recorded yet.</p>';return;}
+  document.getElementById('scoresList').innerHTML=scores.map(s=>`
+    <div class="score-box"><div class="score-exam">${s.exam_name}</div>
+    <div class="score-val">${s.score}</div>
+    <div style="margin:.4rem 0"><div class="progress-bar"><div class="progress-fill" style="width:${s.score}%"></div></div></div>
+    ${s.rank_obtained?`<div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-top:.3rem">🏅 Rank ${s.rank_obtained}</div>`:''}
+    <div class="text-muted">${fmtDate(s.exam_date)}</div></div>`).join('');
+}
+
+async function loadEligibility(){
+  const u=JSON.parse(localStorage.getItem('maritime_user')||'{}');
+  if(!u.student_id)return;
+  try{
+    const data=await api(`/eligibility/${u.student_id}`);
+    document.getElementById('eligList').innerHTML=data.all_companies.map(c=>`
+      <div class="elig-mini ${c.is_eligible?'yes':'no'}">
+        <div><strong>${c.is_eligible?'✅':'❌'} ${c.company_name}</strong>
+        <div style="font-size:.76rem;color:var(--text-muted)">${c.country} · PCM≥${c.min_pcm}% · Eye≤±${c.max_eye_power} ${c.accepts_pending_medical?'· Pending OK':''}</div></div>
+        <div style="text-align:right">
+          <div style="font-weight:800;color:var(--gold);font-family:var(--font-display)">₹${fmt(c.stipend_dns)}/mo</div>
+          ${c.is_eligible?`<button class="btn btn-success btn-sm" style="margin-top:.3rem" onclick="goApply(${c.company_id},'${c.company_name}')">Apply</button>`:''}
+        </div>
+      </div>`).join('');
+  }catch{document.getElementById('eligList').innerHTML='<p style="color:var(--danger)">Could not load.</p>';}
+}
+
+async function loadAnalytics(){
+  try{
+    const d=await api('/applications/analytics');
+    document.getElementById('an_s').textContent=d.students;
+    document.getElementById('an_a').textContent=d.apps;
+    document.getElementById('an_c').textContent=d.companies;
+    document.getElementById('an_p').textContent=parseFloat(d.avg_pcm||0).toFixed(1)+'%';
+    const colors={'Applied':'var(--info)','Under Review':'var(--warning)','Selected':'var(--success)','Rejected':'var(--danger)'};
+    const total=d.application_distribution.reduce((s,a)=>s+parseInt(a.cnt),0)||1;
+    document.getElementById('analyticsChart').innerHTML=d.application_distribution.map(a=>`
+      <div class="bar-row"><div class="bar-lbl">${a.application_status}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(a.cnt/total*100)}%;background:${colors[a.application_status]||'var(--teal)'}"> ${a.cnt}</div></div>
+      <div class="bar-cnt">${a.cnt}</div></div>`).join('');
+    document.getElementById('topCompanies').innerHTML=d.top_companies.map((c,i)=>`
+      <div style="display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--cream-mid);font-size:.88rem">
+        <span>${['🥇','🥈','🥉','4.','5.'][i]} ${c.company_name}</span>
+        <span class="badge badge-teal">${c.apps} apps</span></div>`).join('');
+  }catch{}
+}
+
+function switchTab(name){
+  document.querySelectorAll('.dash-tab').forEach((t,i)=>{
+    const names=['applications','eligibility','documents','scores','analytics'];
+    t.className='dash-tab'+(names[i]===name?' active':'');
+  });
+  document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab_'+name).classList.add('active');
+  if(name==='eligibility'&&!eligLoaded){loadEligibility();eligLoaded=true;}
+  if(name==='analytics'&&!analyticsLoaded){loadAnalytics();analyticsLoaded=true;}
+}
+
+function goApply(id,name){localStorage.setItem('apply_company_id',id);localStorage.setItem('apply_company_name',name);location.href='tracker.html';}
+loadDashboard();
+</script>
+</body>
+</html>

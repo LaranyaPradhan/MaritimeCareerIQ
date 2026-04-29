@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Eligibility Checker — MaritimeCareerIQ</title>
+<link rel="stylesheet" href="css/global.css"/>
+<style>
+.elig-layout{display:grid;grid-template-columns:370px 1fr;gap:2rem;align-items:start;}
+.form-panel{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.8rem;position:sticky;top:90px;box-shadow:var(--card-shadow);}
+.form-panel h3{color:var(--navy);margin-bottom:1.3rem;}
+.slider-row label{display:flex;justify-content:space-between;}
+.sv{font-weight:700;color:var(--teal-dark);}
+input[type=range]{width:100%;accent-color:var(--teal-dark);cursor:pointer;margin-top:.3rem;}
+.sdiv{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);font-weight:700;margin:.9rem 0 .4rem;padding-top:.7rem;border-top:1px solid var(--cream-mid);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+/* Results */
+.sum-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1.4rem;}
+.sum-c{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius-sm);padding:.9rem;text-align:center;box-shadow:var(--card-shadow);}
+.sum-c .n{font-family:var(--font-display);font-size:1.75rem;font-weight:800;}
+.sum-c .l{font-size:.72rem;color:var(--text-muted);margin-top:.1rem;}
+.tab-row{display:flex;gap:.4rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.tab-btn{padding:.42rem 1rem;border-radius:50px;border:1.5px solid var(--card-border);background:transparent;color:var(--text-mid);cursor:pointer;font-size:.83rem;font-weight:600;transition:var(--transition);font-family:var(--font-body);}
+.tab-btn.active{background:var(--navy);color:var(--white);border-color:var(--navy);}
+.ec{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.2rem;margin-bottom:.7rem;transition:var(--transition);}
+.ec:hover{box-shadow:var(--card-shadow);}
+.ec.yes{border-left:4px solid var(--success);background:rgba(5,150,105,.02);}
+.ec.no{border-left:4px solid #e2d9cc;opacity:.65;}
+.ec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem;margin-bottom:.7rem;}
+.ec-name{font-weight:700;font-size:.93rem;color:var(--navy);}
+.ec-stip{color:var(--gold);font-weight:700;font-size:.88rem;}
+.crit-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.3rem;}
+.cr{display:flex;align-items:center;gap:.3rem;font-size:.74rem;padding:.25rem .45rem;border-radius:4px;}
+.cr.ok{background:var(--success-bg);color:var(--success);}
+.cr.no{background:var(--danger-bg);color:var(--danger);}
+.cr.inf{background:var(--info-bg);color:var(--info);}
+.empty{text-align:center;padding:3rem;color:var(--text-muted);}
+.empty .em{font-size:3.2rem;margin-bottom:.8rem;}
+@media(max-width:900px){.elig-layout{grid-template-columns:1fr;}.form-panel{position:static;}.sum-row{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a class="brand" href="index.html"><span class="brand-logo">⚓</span><span class="brand-text">Maritime<span class="accent">CareerIQ</span></span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><a href="companies.html">Companies</a>
+    <a href="eligibility.html" class="active">Eligibility</a><a href="financial.html">Finance</a>
+    <a href="dashboard.html">Dashboard</a><span id="authNav"></span>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>✅ Eligibility Checker</h1>
+  <p>Check PCM, 10th/12th, English %, eyesight, IMU-CET, swimming, medical — across all 30 companies instantly</p>
+</div>
+
+<div class="page-wrapper">
+  <div class="elig-layout">
+
+    <div class="form-panel">
+      <h3>📋 Your Profile</h3>
+
+      <div class="form-group slider-row">
+        <label>PCM Percentage <span class="sv" id="vpcm">70%</span></label>
+        <input type="range" id="pcm" min="40" max="100" step="0.5" value="70" oninput="document.getElementById('vpcm').textContent=this.value+'%'"/>
+      </div>
+
+      <div class="sdiv">Academic Marks</div>
+      <div class="g2">
+        <div class="form-group"><label>10th %</label><input type="number" id="tenth" placeholder="80.0" step="0.1"/></div>
+        <div class="form-group"><label>12th %</label><input type="number" id="twelfth" placeholder="78.0" step="0.1"/></div>
+        <div class="form-group"><label>10th English %</label><input type="number" id="tenth_en" placeholder="75.0" step="0.1"/></div>
+        <div class="form-group"><label>12th English %</label><input type="number" id="twelfth_en" placeholder="72.0" step="0.1"/></div>
+      </div>
+
+      <div class="sdiv">Vision & Medical</div>
+      <div class="form-group slider-row">
+        <label>Eye Power (diopters) <span class="sv" id="veye">±1.5</span></label>
+        <input type="range" id="eye" min="0" max="6" step="0.5" value="1.5" oninput="document.getElementById('veye').textContent='±'+this.value"/>
+      </div>
+      <div class="form-group mt-1">
+        <label>Medical Status</label>
+        <select id="medical">
+          <option value="Fit">Fit — Medical Done &amp; Passed</option>
+          <option value="Pending">Pending — Not Done Yet</option>
+          <option value="Unfit">Unfit</option>
+        </select>
+      </div>
+
+      <div class="sdiv">Other</div>
+      <div class="g2">
+        <div class="form-group"><label>IMU-CET Rank</label><input type="number" id="imu" placeholder="Optional"/></div>
+        <div class="form-group"><label>Age</label><input type="number" id="age" value="18" min="15" max="35"/></div>
+      </div>
+      <div class="form-group mt-1">
+        <label>Pathway</label>
+        <select id="pathway"><option value="DNS">DNS</option><option value="BSc Nautical Science">BSc Nautical Science</option></select>
+      </div>
+      <div class="form-group mt-1">
+        <label class="checkbox-label"><input type="checkbox" id="swim" checked/><span>Swimming Certified</span></label>
+      </div>
+
+      <button class="btn btn-primary btn-full mt-2" onclick="runCheck()">🔍 Check Eligibility</button>
+      <div id="autoBtn" class="hidden mt-1">
+        <button class="btn btn-outline btn-full" onclick="autoFill()">✨ Auto-fill from my profile</button>
+      </div>
+      <div id="chkMsg" class="hidden mt-1"></div>
+
+      <div style="margin-top:1.2rem;background:var(--info-bg);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.8rem;color:var(--info)">
+        <strong>Criteria checked:</strong> PCM · 10th% · 12th% · Eyesight · Medical · Swimming · IMU-CET · Pathway · Age
+      </div>
+    </div>
+
+    <div>
+      <div class="empty" id="emptyState">
+        <div class="em">🧭</div>
+        <h3>Set your profile and check eligibility</h3>
+        <p style="margin-top:.5rem">Adjust the inputs on the left and click <strong>Check Eligibility</strong>.<br/>You'll instantly see which companies you qualify for and exactly which criteria you pass or fail.</p>
+      </div>
+
+      <div id="resultsBox" class="hidden">
+        <div class="sum-row" id="sumRow"></div>
+        <div class="tab-row">
+          <button class="tab-btn active" id="tbE" onclick="showTab('elig')">✅ Eligible (<span id="cntE">0</span>)</button>
+          <button class="tab-btn" id="tbA" onclick="showTab('all')">All Companies (<span id="cntA">0</span>)</button>
+        </div>
+        <div id="resList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">⚓ MaritimeCareerIQ<p>SRM IST DBMS Mini Project</p></div>
+    <div class="footer-links"><a href="companies.html">Companies</a><a href="financial.html">Finance</a><a href="dashboard.html">Dashboard</a></div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+let lastData=null;let curTab='elig';
+setAuthNav('authNav');
+if(localStorage.getItem('maritime_token')) document.getElementById('autoBtn').classList.remove('hidden');
+
+async function autoFill(){
+  try{
+    const {student:s}=await api('/students/profile');
+    document.getElementById('pcm').value=s.pcm_percentage;
+    document.getElementById('vpcm').textContent=s.pcm_percentage+'%';
+    document.getElementById('tenth').value=s.tenth_percentage||'';
+    document.getElementById('twelfth').value=s.twelfth_percentage||'';
+    document.getElementById('tenth_en').value=s.tenth_english||'';
+    document.getElementById('twelfth_en').value=s.twelfth_english||'';
+    document.getElementById('eye').value=s.eyesight;
+    document.getElementById('veye').textContent='±'+s.eyesight;
+    document.getElementById('medical').value=s.medical_status;
+    document.getElementById('imu').value=s.imu_cet_rank||'';
+    document.getElementById('age').value=s.age||18;
+    document.getElementById('pathway').value=s.academic_pathway;
+    document.getElementById('swim').checked=!!s.swimming_certified;
+    showToast('Profile loaded!','success');
+    runCheck();
+  }catch(e){showToast('Could not load profile','error');}
+}
+
+async function runCheck(){
+  const body={
+    pcm_percentage:parseFloat(document.getElementById('pcm').value),
+    tenth_percentage:document.getElementById('tenth').value||null,
+    twelfth_percentage:document.getElementById('twelfth').value||null,
+    eyesight:parseFloat(document.getElementById('eye').value),
+    medical_status:document.getElementById('medical').value,
+    imu_cet_rank:document.getElementById('imu').value||null,
+    swimming_certified:document.getElementById('swim').checked,
+    age:parseInt(document.getElementById('age').value)||18,
+    academic_pathway:document.getElementById('pathway').value,
+  };
+  try{
+    const data=await api('/eligibility/check',{method:'POST',body:JSON.stringify(body)});
+    lastData=data;
+    document.getElementById('emptyState').classList.add('hidden');
+    document.getElementById('resultsBox').classList.remove('hidden');
+    document.getElementById('cntE').textContent=data.eligible_count;
+    document.getElementById('cntA').textContent=data.total_companies;
+    const pct=Math.round(data.eligible_count/data.total_companies*100);
+    document.getElementById('sumRow').innerHTML=`
+      <div class="sum-c"><div class="n" style="color:var(--success)">${data.eligible_count}</div><div class="l">Eligible</div></div>
+      <div class="sum-c"><div class="n" style="color:var(--danger)">${data.total_companies-data.eligible_count}</div><div class="l">Not Eligible</div></div>
+      <div class="sum-c"><div class="n" style="color:var(--navy)">${data.total_companies}</div><div class="l">Total</div></div>
+      <div class="sum-c"><div class="n" style="color:var(--teal-dark)">${pct}%</div><div class="l">Match Rate</div></div>`;
+    showTab(curTab);
+  }catch(e){
+    showMsg('chkMsg',e.message||'Check failed.','error');
+    document.getElementById('chkMsg').classList.remove('hidden');
+  }
+}
+
+function showTab(tab){
+  curTab=tab;
+  document.getElementById('tbE').className='tab-btn'+(tab==='elig'?' active':'');
+  document.getElementById('tbA').className='tab-btn'+(tab==='all'?' active':'');
+  renderList(tab==='elig'?lastData.eligible_companies:lastData.all_companies);
+}
+
+function renderList(list){
+  if(!list.length){
+    document.getElementById('resList').innerHTML=`<div class="empty"><div class="em">😔</div><h3>No companies found</h3><p>Tips: Improve PCM, complete medical, get swimming certified, obtain IMU-CET rank.</p></div>`;
+    return;
+  }
+  const myPcm=parseFloat(document.getElementById('pcm').value);
+  const myEye=parseFloat(document.getElementById('eye').value);
+  document.getElementById('resList').innerHTML=list.map(c=>`
+    <div class="ec ${c.is_eligible?'yes':'no'}">
+      <div class="ec-head">
+        <div>
+          <div class="ec-name">${c.is_eligible?'✅':'❌'} ${c.company_name} <span style="color:var(--text-muted);font-weight:400;font-size:.77rem">· ${c.country}</span></div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.12rem">Bond ${c.bond_years}yr · Wait ${c.waiting_period_months}mo · ${c.tax_policy} · ${c.female_crew_policy} female policy</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="ec-stip">₹${fmt(c.stipend_dns)}/mo</div>
+          ${c.stipend_onboard_trainee?`<div style="font-size:.71rem;color:var(--teal-dark)">$${c.stipend_onboard_trainee}/mo onboard</div>`:''}
+        </div>
+      </div>
+      <div class="crit-wrap">
+        <div class="cr ${c.pcm_ok?'ok':'no'}">${c.pcm_ok?'✅':'❌'} PCM ≥${c.min_pcm}% (${myPcm}%)</div>
+        <div class="cr ${c.eye_ok?'ok':'no'}">${c.eye_ok?'✅':'❌'} Eye ≤±${c.max_eye_power} (±${myEye})</div>
+        <div class="cr ${c.med_ok?'ok':'no'}">${c.med_ok?'✅':'❌'} Medical: ${c.medical_standard}${c.accepts_pending_medical?' ✅Pending OK':''}</div>
+        <div class="cr ${c.swim_ok?'ok':'no'}">${c.swim_ok?'✅':'❌'} Swimming ${c.swimming_required?'Required':'Optional'}</div>
+        <div class="cr ${c.imu_ok?'ok':'no'}">${c.imu_ok?'✅':'❌'} IMU-CET ${c.imu_cet_required?'Required':'Optional'}</div>
+        <div class="cr ${c.tenth_ok?'ok':'no'}">${c.tenth_ok?'✅':'❌'} 10th ≥${c.min_10th_percentage||'—'}%</div>
+        <div class="cr ${c.twelfth_ok?'ok':'no'}">${c.twelfth_ok?'✅':'❌'} 12th ≥${c.min_12th_percentage||'—'}%</div>
+        <div class="cr ${c.pathway_ok?'ok':'no'}">${c.pathway_ok?'✅':'❌'} ${c.accepts_dns?'DNS':''}${c.accepts_dns&&c.accepts_bsc?' / ':''}${c.accepts_bsc?'BSc NS':''}</div>
+        <div class="cr ${c.age_ok?'ok':'no'}">${c.age_ok?'✅':'❌'} Age ${c.age_min}–${c.age_max}</div>
+        ${c.own_cbt_test?'<div class="cr inf">ℹ️ Own CBT Test</div>':''}
+        ${c.psychometric_test?'<div class="cr inf">ℹ️ Psychometric</div>':''}
+      </div>
+      ${c.is_eligible?`<div style="display:flex;justify-content:flex-end;gap:.5rem;margin-top:.8rem">
+        <button class="btn btn-outline btn-sm" onclick="location.href='companies.html'">View Details</button>
+        <button class="btn btn-primary btn-sm" onclick="goApply(${c.company_id},'${c.company_name.replace(/'/g,"\\'")}')">Apply →</button>
+      </div>`:''}
+    </div>`).join('');
+}
+
+function goApply(id,name){
+  if(!localStorage.getItem('maritime_token')){showToast('Please login first','error');setTimeout(()=>location.href='index.html',1200);return;}
+  localStorage.setItem('apply_company_id',id);localStorage.setItem('apply_company_name',name);location.href='tracker.html';
+}
+</script>
+</body>
+</html>

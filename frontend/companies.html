@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Companies — MaritimeCareerIQ</title>
+<link rel="stylesheet" href="css/global.css"/>
+<style>
+.filter-bar{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.2rem 1.5rem;margin-bottom:1.8rem;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;box-shadow:var(--card-shadow);}
+.filter-bar input,.filter-bar select{background:var(--cream);color:var(--text-dark);border:1.5px solid var(--card-border);border-radius:var(--radius-sm);padding:.5rem .85rem;font-size:.85rem;font-family:var(--font-body);outline:none;transition:var(--transition);}
+.filter-bar input{flex:1;min-width:190px;}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--teal);background:var(--white);}
+.results-count{color:var(--text-light);font-size:.83rem;margin-bottom:1rem;}
+.company-card{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.5rem;transition:var(--transition);cursor:pointer;display:flex;flex-direction:column;gap:.9rem;box-shadow:var(--card-shadow);}
+.company-card:hover{border-color:var(--teal-dark);box-shadow:var(--card-shadow-lg);transform:translateY(-3px);}
+.company-card.border-open{border-top:3px solid var(--success);}
+.company-card.border-upcoming{border-top:3px solid var(--warning);}
+.company-card.border-closed{border-top:3px solid var(--danger);}
+.co-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+.co-name{font-family:var(--font-display);font-size:1.12rem;font-weight:700;color:var(--navy);}
+.co-sub{color:var(--text-light);font-size:.79rem;margin-top:.2rem;}
+.stipend-chip{background:var(--gold-light);border:1px solid rgba(180,83,9,.2);border-radius:var(--radius-sm);padding:.5rem .85rem;text-align:right;flex-shrink:0;}
+.stipend-chip .amt{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--gold);}
+.stipend-chip .lbl{font-size:.68rem;color:var(--text-light);}
+.co-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem;background:var(--cream);border-radius:var(--radius-sm);padding:.8rem;}
+.meta-item .k{font-size:.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;}
+.meta-item .v{font-size:.84rem;color:var(--text-dark);font-weight:500;margin-top:.1rem;}
+.req-chips{display:flex;flex-wrap:wrap;gap:.4rem;}
+.req-chip{background:var(--cream-dark);border:1px solid var(--card-border);border-radius:50px;padding:.18rem .65rem;font-size:.73rem;color:var(--text-mid);}
+.req-chip.hi{background:var(--teal-light);color:var(--teal-dark);border-color:rgba(8,145,178,.25);}
+.req-chip.red{background:var(--danger-bg);color:var(--danger);border-color:rgba(220,38,38,.2);}
+.co-footer{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;}
+/* Modal */
+.modal-section{margin-bottom:1.4rem;}
+.modal-section h4{font-family:var(--font-body);font-weight:700;color:var(--navy);font-size:.93rem;margin-bottom:.7rem;padding-bottom:.4rem;border-bottom:1px solid var(--cream-mid);}
+.process-step{display:flex;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--cream-mid);align-items:flex-start;}
+.process-step:last-child{border-bottom:none;}
+.step-num{width:24px;height:24px;background:var(--navy);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.step-num.elim{background:var(--danger);}
+.step-name{font-weight:600;font-size:.85rem;}
+.step-desc{font-size:.78rem;color:var(--text-mid);margin-top:.1rem;}
+.doctor-row{background:var(--cream);border-radius:var(--radius-sm);padding:.7rem .9rem;margin-bottom:.4rem;}
+.doctor-row .dn{font-weight:600;font-size:.85rem;color:var(--navy);}
+.doctor-row .dm{font-size:.76rem;color:var(--text-mid);margin-top:.15rem;}
+.salary-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--cream-mid);}
+.salary-row:last-child{border-bottom:none;}
+.salary-rank{font-weight:600;font-size:.85rem;}
+.salary-amt{text-align:right;}
+.salary-usd{color:var(--success);font-weight:700;font-size:.9rem;}
+.salary-inr{color:var(--text-muted);font-size:.75rem;}
+.college-row{background:var(--cream);border-radius:var(--radius-sm);padding:.7rem .9rem;margin-bottom:.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.college-name{font-weight:600;font-size:.85rem;color:var(--navy);}
+.college-meta{font-size:.75rem;color:var(--text-mid);}
+.fleet-wrap{display:flex;flex-wrap:wrap;gap:.5rem;}
+.fleet-pill{background:var(--info-bg);color:var(--info);border-radius:50px;padding:.22rem .75rem;font-size:.76rem;font-weight:600;}
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.fin-box{background:var(--cream);border-radius:var(--radius-sm);padding:.65rem .85rem;}
+.fin-box .fk{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+.fin-box .fv{font-size:.92rem;font-weight:700;color:var(--navy);margin-top:.15rem;}
+.fin-total{background:var(--navy);color:var(--white);border-radius:var(--radius-sm);padding:.9rem 1.1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
+.fin-total .ftl{font-size:.82rem;opacity:.75;}
+.fin-total .fta{font-family:var(--font-display);font-size:1.35rem;font-weight:800;}
+.deadline-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+@media(max-width:600px){.fin-grid,.deadline-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a class="brand" href="index.html"><span class="brand-logo">⚓</span><span class="brand-text">Maritime<span class="accent">CareerIQ</span></span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><a href="companies.html" class="active">Companies</a>
+    <a href="eligibility.html">Eligibility</a><a href="financial.html">Finance</a>
+    <a href="dashboard.html">Dashboard</a><span id="authNav"></span>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>🏢 Sponsoring Companies</h1>
+  <p>30+ maritime companies — eligibility, fleet, selection process, doctors, colleges, salary & deadlines</p>
+</div>
+
+<div class="page-wrapper">
+  <div class="grid-4" style="margin-bottom:2rem">
+    <div class="stat-box"><div class="num" id="s_cos">—</div><div class="label">Companies</div></div>
+    <div class="stat-box"><div class="num" id="s_avg">—</div><div class="label">Avg DNS Stipend</div></div>
+    <div class="stat-box"><div class="num" id="s_open">—</div><div class="label">Open Now 🟢</div></div>
+    <div class="stat-box"><div class="num" id="s_tf">—</div><div class="label">Tax-Free</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="🔍  Search company, country…" oninput="filterCards()"/>
+    <select id="fTax" onchange="filterCards()"><option value="">All Tax</option><option>Tax-Free</option><option>Taxable</option></select>
+    <select id="fFemale" onchange="filterCards()"><option value="">All Crew</option><option value="Accepted">Female Accepted</option><option value="Limited">Limited</option><option value="Not Accepted">Not Accepted</option></select>
+    <select id="fDeadline" onchange="filterCards()"><option value="">All Deadlines</option><option value="Open Now">🟢 Open Now</option><option value="Upcoming">🟡 Upcoming</option><option value="Closed">🔴 Closed</option></select>
+    <select id="fPending" onchange="filterCards()"><option value="">All Medical</option><option value="1">✅ Accepts Pending Medical</option></select>
+    <select id="fSwim" onchange="filterCards()"><option value="">All Swimming</option><option value="0">No Swim Req</option><option value="1">Swim Required</option></select>
+    <select id="sortBy" onchange="filterCards()">
+      <option value="stipend_desc">Stipend: High→Low</option>
+      <option value="stipend_asc">Stipend: Low→High</option>
+      <option value="pcm_asc">PCM Req: Easy First</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
+  <p class="results-count" id="resultsCount"></p>
+  <div class="grid-2" id="companyGrid">
+    <div class="loader" style="grid-column:1/-1"><div class="spinner"></div><p style="margin-top:.8rem">Loading companies…</p></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div><h2 id="m_name" style="color:var(--navy)"></h2><p id="m_sub" style="color:var(--text-mid);font-size:.83rem;margin-top:.2rem"></p></div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div id="m_body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">⚓ MaritimeCareerIQ<p>SRM IST DBMS Mini Project</p></div>
+    <div class="footer-links"><a href="eligibility.html">Eligibility</a><a href="financial.html">Finance</a><a href="dashboard.html">Dashboard</a></div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+let allCompanies=[];
+setAuthNav('authNav');
+
+async function loadCompanies(){
+  try{
+    const data=await api('/companies');
+    allCompanies=data.companies;
+    document.getElementById('s_cos').textContent=allCompanies.length;
+    const avg=allCompanies.reduce((s,c)=>s+c.stipend_dns,0)/allCompanies.length;
+    document.getElementById('s_avg').textContent='₹'+fmt(Math.round(avg));
+    document.getElementById('s_open').textContent=allCompanies.filter(c=>c.deadline_status==='Open Now').length;
+    document.getElementById('s_tf').textContent=allCompanies.filter(c=>c.tax_policy==='Tax-Free').length;
+    filterCards();
+  }catch(e){
+    document.getElementById('companyGrid').innerHTML=`<p style="grid-column:1/-1;color:var(--danger);text-align:center;padding:3rem">Failed to load. Is the backend running on port 5000?</p>`;
+  }
+}
+
+function filterCards(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const fT=document.getElementById('fTax').value;
+  const fF=document.getElementById('fFemale').value;
+  const fD=document.getElementById('fDeadline').value;
+  const fP=document.getElementById('fPending').value;
+  const fS=document.getElementById('fSwim').value;
+  const sort=document.getElementById('sortBy').value;
+
+  let list=allCompanies.filter(c=>{
+    return (!q||(c.company_name+' '+c.country+' '+c.hq_city).toLowerCase().includes(q))
+      &&(!fT||c.tax_policy===fT)
+      &&(!fF||c.female_crew_policy.includes(fF))
+      &&(!fD||c.deadline_status===fD)
+      &&(!fP||String(c.accepts_pending_medical)==='1'||c.accepts_pending_medical===true)
+      &&(fS===''||(fS==='0'?!c.swimming_required:!!c.swimming_required));
+  });
+  if(sort==='stipend_desc') list.sort((a,b)=>b.stipend_dns-a.stipend_dns);
+  if(sort==='stipend_asc')  list.sort((a,b)=>a.stipend_dns-b.stipend_dns);
+  if(sort==='pcm_asc')      list.sort((a,b)=>a.min_pcm-b.min_pcm);
+  if(sort==='name')         list.sort((a,b)=>a.company_name.localeCompare(b.company_name));
+  document.getElementById('resultsCount').textContent=`Showing ${list.length} of ${allCompanies.length} companies`;
+  renderCards(list);
+}
+
+function renderCards(list){
+  const grid=document.getElementById('companyGrid');
+  if(!list.length){grid.innerHTML=`<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:3rem">No companies match your filters.</p>`;return;}
+  grid.innerHTML=list.map(c=>{
+    const dc=c.deadline_status==='Open Now'?'border-open':c.deadline_status==='Upcoming'?'border-upcoming':c.deadline_status==='Closed'?'border-closed':'';
+    return `<div class="company-card ${dc}" onclick="openModal(${c.company_id})">
+      <div class="co-header">
+        <div>
+          <div class="co-name">${c.company_name}</div>
+          <div class="co-sub">🌍 ${c.country}${c.hq_city?' · '+c.hq_city:''}${c.india_office?' · India: '+c.india_office:''}</div>
+          <div style="margin-top:.3rem">${c.deadline_status?deadlineBadge(c.deadline_status):''}</div>
+        </div>
+        <div class="stipend-chip">
+          <div class="amt">₹${fmt(c.stipend_dns)}</div>
+          <div class="lbl">DNS stipend/mo</div>
+          ${c.stipend_onboard_trainee?`<div style="font-size:.7rem;color:var(--teal-dark);margin-top:.15rem">$${c.stipend_onboard_trainee}/mo onboard</div>`:''}
+        </div>
+      </div>
+      <div class="co-meta">
+        <div class="meta-item"><div class="k">Bond</div><div class="v">${c.bond_years} yrs</div></div>
+        <div class="meta-item"><div class="k">Contract</div><div class="v">${c.minimum_contract_months}–${c.maximum_contract_months} mo</div></div>
+        <div class="meta-item"><div class="k">Wait After DNS</div><div class="v">${c.waiting_period_months} mo</div></div>
+        <div class="meta-item"><div class="k">Promotion</div><div class="v">~${c.promotion_period_years} yrs</div></div>
+        <div class="meta-item"><div class="k">Tax</div><div class="v">${c.tax_policy==='Tax-Free'?'<span class="badge badge-success">Tax-Free</span>':'<span class="badge badge-warning">Taxable</span>'}</div></div>
+        <div class="meta-item"><div class="k">Female</div><div class="v">${c.female_crew_policy==='Accepted'?'<span class="badge badge-success">Yes</span>':c.female_crew_policy==='Limited'?'<span class="badge badge-warning">Limited</span>':'<span class="badge badge-danger">No</span>'}</div></div>
+      </div>
+      <div class="req-chips">
+        <span class="req-chip hi">PCM ≥ ${c.min_pcm}%</span>
+        ${c.min_10th_percentage?`<span class="req-chip">10th ≥ ${c.min_10th_percentage}%</span>`:''}
+        ${c.min_12th_percentage?`<span class="req-chip">12th ≥ ${c.min_12th_percentage}%</span>`:''}
+        <span class="req-chip">Eye ≤ ±${c.max_eye_power}</span>
+        <span class="req-chip">🏊 ${c.swimming_required?'Swim Req':'No Swim'}</span>
+        <span class="req-chip">🏥 ${c.medical_standard}</span>
+        ${c.accepts_pending_medical?'<span class="req-chip hi">✅ Pending OK</span>':'<span class="req-chip red">Must be Fit</span>'}
+        ${c.imu_cet_required?'<span class="req-chip">IMU-CET Req</span>':''}
+        ${c.own_cbt_test?'<span class="req-chip">Own CBT</span>':''}
+        ${c.psychometric_test?'<span class="req-chip">Psychometric</span>':''}
+        ${c.accepts_dns?'<span class="req-chip">DNS</span>':''}${c.accepts_bsc?'<span class="req-chip">BSc NS</span>':''}
+        ${c.dns_joining_month?`<span class="req-chip">Joining: ${c.dns_joining_month}</span>`:''}
+      </div>
+      <div class="co-footer">
+        <div style="font-size:.78rem;color:var(--text-muted)">Fleet: ${c.total_fleet_size||'—'} vessels · Wait: ${c.waiting_period_months}mo after DNS</div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openModal(${c.company_id})">Full Details</button>
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();goApply(${c.company_id},'${c.company_name.replace(/'/g,"\\'")}')">Apply →</button>
+        </div>
+      </div>
+    </div>`;}).join('');
+}
+
+async function openModal(id){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('m_body').innerHTML='<div class="loader"><div class="spinner"></div></div>';
+  try{
+    const {company:c}=await api(`/companies/${id}`);
+    document.getElementById('m_name').textContent=c.company_name;
+    document.getElementById('m_sub').textContent=`${c.country} · ${c.hq_city||''} · ${(c.company_description||'').slice(0,100)}`;
+
+    const fleet=c.fleet.length?`<div class="fleet-wrap">${c.fleet.map(f=>`<div class="fleet-pill">🚢 ${f.ship_type_name} × ${f.number_of_ships}</div>`).join('')}</div>`:'<span class="text-muted">No fleet data.</span>';
+
+    const colleges=c.colleges.length?c.colleges.map(col=>`<div class="college-row">
+      <div><div class="college-name">${col.college_name}${col.is_preferred?' <span style="color:var(--gold);font-size:.75rem">★ Preferred</span>':''}</div>
+      <div class="college-meta">📍 ${col.location} · ${col.course_type} · ${col.duration_months} months · Hostel ₹${fmt(col.hostel_cost_monthly)}/mo</div></div>
+      <div style="text-align:right"><div style="font-weight:700;color:var(--navy)">₹${fmt(col.fee_structure)}</div>
+      <div class="college-meta">Cutoff: Rank ${col.imu_cet_cutoff_rank||'—'}</div>
+      ${col.female_scholarship_available?'<span class="badge badge-success" style="font-size:.68rem">Scholarship ✓</span>':''}</div>
+    </div>`).join(''):'<span class="text-muted">No college data.</span>';
+
+    const process=c.process_steps.length?c.process_steps.map(s=>`<div class="process-step">
+      <div class="step-num ${s.is_eliminatory?'elim':''}">${s.step_order}</div>
+      <div><div class="step-name">${s.step_name} ${s.is_eliminatory?'<span class="badge badge-danger" style="font-size:.64rem">Eliminatory</span>':''}</div>
+      <div class="step-desc">${s.step_desc||''}</div></div>
+    </div>`).join(''):'<span class="text-muted">Selection process not listed. Contact company directly.</span>';
+
+    const doctors=c.doctors.length?c.doctors.map(d=>`<div class="doctor-row">
+      <div class="dn">🩺 ${d.doctor_name}${d.clinic_name?' — '+d.clinic_name:''}</div>
+      <div class="dm">📍 ${d.city}, ${d.state||''} ${d.contact?'| 📞 '+d.contact:''} | Standard: <strong>${d.medical_std}</strong></div>
+    </div>`).join(''):`<div class="doctor-row">
+      <div class="dn">🩺 Approved Medical Centres</div>
+      <div class="dm">Contact ${c.india_office||c.hq_city} office for approved doctor list.<br/>Medical Standard Required: <strong>${c.medical_standard}</strong><br/>
+      ${c.accepts_pending_medical?'<span style="color:var(--success)">✅ Pending medical accepted — must complete before DNS joining.</span>':'<span style="color:var(--danger)">❌ Must be fully medically fit before applying.</span>'}</div>
+    </div>`;
+
+    const salary=c.salary_progression.length?c.salary_progression.map(s=>`<div class="salary-row">
+      <div class="salary-rank">${s.rank_name}</div>
+      <div class="salary-amt"><div class="salary-usd">${s.salary_usd_month?'$'+fmt(s.salary_usd_month)+'/mo':'Stipend ₹'+fmt(s.salary_inr_approx)}</div>
+      <div class="salary-inr">≈ ₹${fmt(s.salary_inr_approx)}/mo · Exp: ${s.years_experience_min}–${s.years_experience_max} yrs</div></div>
+    </div>`).join(''):'<span class="text-muted">Salary data not available.</span>';
+
+    const fin=c.financial;
+    const finHtml=fin?`
+      <div class="fin-total"><span class="ftl">📊 Estimated Total Pre-Boarding Investment</span><span class="fta">₹${fmt(fin.total_investment_approx)}</span></div>
+      <div class="fin-grid">
+        <div class="fin-box"><div class="fk">College Fees</div><div class="fv">₹${fmt(fin.dns_college_fees)}</div></div>
+        <div class="fin-box"><div class="fk">Hostel (Full Course)</div><div class="fv">₹${fmt(fin.hostel_cost_total)}</div></div>
+        <div class="fin-box"><div class="fk">Food / Month</div><div class="fv">₹${fmt(fin.food_cost_monthly)}</div></div>
+        <div class="fin-box"><div class="fk">Uniform & Kit</div><div class="fv">₹${fmt(fin.uniform_kit_cost)}</div></div>
+        <div class="fin-box"><div class="fk">Books & Materials</div><div class="fv">₹${fmt(fin.books_cost)}</div></div>
+        <div class="fin-box"><div class="fk">Medical Exam</div><div class="fv">₹${fmt(fin.medical_exam_cost)}</div></div>
+        <div class="fin-box"><div class="fk">IMU-CET Fee</div><div class="fv">₹${fmt(fin.imu_cet_exam_cost)}</div></div>
+        <div class="fin-box"><div class="fk">Company Exam Fee</div><div class="fv">₹${fmt(fin.company_exam_cost)}</div></div>
+        <div class="fin-box"><div class="fk">Documents</div><div class="fv">₹${fmt(fin.document_cost)}</div></div>
+        <div class="fin-box"><div class="fk">Travel</div><div class="fv">₹${fmt(fin.travel_cost)}</div></div>
+        <div class="fin-box"><div class="fk">Miscellaneous</div><div class="fv">₹${fmt(fin.miscellaneous)}</div></div>
+        <div class="fin-box"><div class="fk">DNS Stipend / mo</div><div class="fv" style="color:var(--success)">₹${fmt(fin.dns_stipend_monthly)}</div></div>
+        <div class="fin-box"><div class="fk">Onboard Trainee</div><div class="fv" style="color:var(--success)">$${fin.onboard_trainee_usd}/mo</div></div>
+        <div class="fin-box"><div class="fk">Savings / Contract</div><div class="fv" style="color:var(--navy);font-size:1.05rem">₹${fmt(fin.savings_per_contract_inr)}</div></div>
+        <div class="fin-box"><div class="fk">3rd Officer Exam Cost</div><div class="fv" style="color:var(--warning)">₹${fmt(fin.third_officer_exam_cost)}</div></div>
+        <div class="fin-box"><div class="fk">ROI (Months)</div><div class="fv" style="color:var(--teal-dark)">${fin.roi_months} months</div></div>
+      </div>
+      <div style="background:var(--success-bg);border-radius:var(--radius-sm);padding:.75rem 1rem;margin-top:.7rem;font-size:.82rem;color:var(--success)">
+        💡 <strong>Bottom Line:</strong> You invest ₹${fmt(fin.total_investment_approx)} total. After one ship contract you earn back ₹${fmt(fin.savings_per_contract_inr)}. You break even in <strong>${fin.roi_months} months</strong>. After 3rd Officer certification you're earning ~₹2–4L/month.
+      </div>`:'<span class="text-muted">Financial data not available.</span>';
+
+    const dl=c.deadline;
+    const dlHtml=dl?`<div class="deadline-grid">
+      <div class="fin-box"><div class="fk">Status</div><div class="fv">${deadlineBadge(dl.status)}</div></div>
+      <div class="fin-box"><div class="fk">Forms Open</div><div class="fv">${fmtDate(dl.forms_open_date)}</div></div>
+      <div class="fin-box"><div class="fk">Forms Close</div><div class="fv">${fmtDate(dl.forms_close_date)}</div></div>
+      <div class="fin-box"><div class="fk">Exam Date</div><div class="fv">${dl.exam_date?fmtDate(dl.exam_date):'—'}</div></div>
+      <div class="fin-box"><div class="fk">Interview Month</div><div class="fv">${dl.interview_month||'—'}</div></div>
+      <div class="fin-box"><div class="fk">DNS Joining</div><div class="fv">${dl.dns_joining_month||'—'}</div></div>
+    </div>${dl.notes?`<div style="background:var(--info-bg);border-radius:var(--radius-sm);padding:.65rem .9rem;margin-top:.6rem;font-size:.8rem;color:var(--info)">ℹ️ ${dl.notes}</div>`:''}`:
+    '<span class="text-muted">Deadline info not available. Check company website.</span>';
+
+    document.getElementById('m_body').innerHTML=`
+      <div class="grid-4" style="margin-bottom:1.3rem">
+        <div class="stat-box"><div class="num" style="font-size:1.4rem">₹${fmt(c.stipend_dns)}</div><div class="label">DNS Stipend/mo</div></div>
+        <div class="stat-box"><div class="num" style="font-size:1.4rem">${c.stipend_onboard_trainee?'$'+c.stipend_onboard_trainee:'—'}</div><div class="label">Onboard USD/mo</div></div>
+        <div class="stat-box"><div class="num" style="font-size:1.4rem">${c.bond_years}y</div><div class="label">Bond Period</div></div>
+        <div class="stat-box"><div class="num" style="font-size:1.4rem">${c.waiting_period_months}mo</div><div class="label">Wait After DNS</div></div>
+      </div>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem">
+        ${c.tax_policy==='Tax-Free'?'<span class="badge badge-success">✅ Tax-Free</span>':'<span class="badge badge-warning">Taxable</span>'}
+        <span class="badge ${c.female_crew_policy==='Accepted'?'badge-success':c.female_crew_policy==='Limited'?'badge-warning':'badge-danger'}">👩‍✈️ ${c.female_crew_policy}</span>
+        ${dl?deadlineBadge(dl.status):''}
+        ${c.accepts_pending_medical?'<span class="badge badge-teal">Pending Medical OK</span>':'<span class="badge badge-danger">Must be Fit</span>'}
+        ${c.accepts_dns?'<span class="badge badge-navy">DNS</span>':''}${c.accepts_bsc?'<span class="badge badge-navy">BSc NS</span>':''}
+        ${c.imu_cet_required?'<span class="badge badge-info">IMU-CET Required</span>':''}
+        ${c.own_cbt_test?'<span class="badge badge-info">Own CBT</span>':''}
+        ${c.psychometric_test?'<span class="badge badge-info">Psychometric</span>':''}
+      </div>
+      ${c.additional_notes?`<div style="background:var(--cream-dark);border-left:3px solid var(--teal);padding:.75rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.8rem;color:var(--text-mid);margin-bottom:1.1rem">📌 ${c.additional_notes}</div>`:''}
+      <div class="modal-section"><h4>📅 Application Deadlines & Schedule</h4>${dlHtml}</div>
+      <div class="modal-section"><h4>📋 Selection Process (Step by Step)</h4>${process}</div>
+      <div class="modal-section"><h4>💰 Complete Financial Analysis</h4>${finHtml}</div>
+      <div class="modal-section"><h4>📈 Salary Progression (Deck Officer)</h4>${salary}</div>
+      <div class="modal-section"><h4>🚢 Fleet Composition (${c.total_fleet_size||'—'} vessels)</h4>${fleet}</div>
+      <div class="modal-section"><h4>🎓 Partner Colleges — Where You'll Study DNS</h4>${colleges}</div>
+      <div class="modal-section"><h4>🩺 Approved Medical Doctors</h4>${doctors}</div>
+      <div style="display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.2rem">
+        <button class="btn btn-primary" onclick="goApply(${c.company_id},'${c.company_name.replace(/'/g,"\\'")}')">Apply Now →</button>
+        <button class="btn btn-outline" onclick="closeModalDirect()">Close</button>
+      </div>`;
+  }catch(e){document.getElementById('m_body').innerHTML=`<p style="color:var(--danger)">Failed to load. ${e.message||''}</p>`;}
+}
+
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open');}
+function goApply(id,name){
+  if(!localStorage.getItem('maritime_token')){showToast('Please login to apply','error');setTimeout(()=>location.href='index.html',1200);return;}
+  localStorage.setItem('apply_company_id',id);localStorage.setItem('apply_company_name',name);
+  location.href='tracker.html';
+}
+loadCompanies();
+</script>
+</body>
+</html>

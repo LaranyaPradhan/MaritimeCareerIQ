@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Financial Planner — MaritimeCareerIQ</title>
+<link rel="stylesheet" href="css/global.css"/>
+<style>
+body{background:var(--cream);}
+.fin-grid{display:grid;grid-template-columns:340px 1fr;gap:2rem;align-items:start;}
+.inputs-panel{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:2rem;position:sticky;top:90px;box-shadow:var(--card-shadow);}
+.inputs-panel h3{font-family:var(--font-display);color:var(--navy);margin-bottom:1.5rem;}
+.timeline{position:relative;padding-left:2rem;}
+.timeline::before{content:'';position:absolute;left:.65rem;top:0;bottom:0;width:2px;background:var(--cream-mid);}
+.tl-item{position:relative;margin-bottom:1.8rem;}
+.tl-dot{position:absolute;left:-1.65rem;top:.3rem;width:14px;height:14px;border-radius:50%;border:2px solid var(--white);box-shadow:0 0 0 2px var(--cream-mid);}
+.tl-dot.navy{background:var(--navy);}
+.tl-dot.teal{background:var(--teal-dark);}
+.tl-dot.gold{background:var(--gold-mid);}
+.tl-dot.green{background:var(--success);}
+.tl-phase{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;font-weight:700;color:var(--text-muted);margin-bottom:.25rem;}
+.tl-title{font-weight:700;color:var(--navy);font-size:.95rem;}
+.tl-sub{font-size:.82rem;color:var(--text-mid);margin-top:.15rem;line-height:1.5;}
+.tl-cost{margin-top:.5rem;background:var(--cream);border-radius:var(--radius-sm);padding:.6rem .9rem;}
+.tl-cost .main{font-weight:800;font-size:1.1rem;font-family:var(--font-display);}
+.tl-cost .note{font-size:.75rem;color:var(--text-muted);}
+.cost-row{display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--cream-mid);font-size:.85rem;}
+.cost-row:last-child{border-bottom:none;}
+.cost-row .k{color:var(--text-mid);}
+.cost-row .v{font-weight:600;color:var(--navy);}
+.total-band{background:var(--navy);color:var(--white);border-radius:var(--radius-sm);padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;margin-top:.7rem;}
+.total-band .lbl{font-size:.85rem;opacity:.75;}
+.total-band .val{font-family:var(--font-display);font-size:1.4rem;font-weight:800;}
+.earnings-card{background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:var(--white);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;}
+.earnings-card h4{color:rgba(255,255,255,.7);font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.8rem;font-family:var(--font-body);}
+.earn-row{display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.88rem;}
+.earn-row:last-child{border-bottom:none;}
+.earn-row .ek{color:rgba(255,255,255,.65);}
+.earn-row .ev{font-weight:700;color:var(--white);}
+.green-band{background:var(--success-bg);border:1.5px solid rgba(5,150,105,.25);border-radius:var(--radius-sm);padding:1rem 1.2rem;margin-top:.8rem;}
+.green-band h4{color:var(--success);font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.5rem;font-family:var(--font-body);}
+.green-val{font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--success);}
+.progression-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+.progression-table th{background:var(--navy);color:var(--white);padding:.65rem 1rem;text-align:left;font-size:.75rem;letter-spacing:.5px;}
+.progression-table td{padding:.65rem 1rem;border-bottom:1px solid var(--cream-mid);}
+.progression-table tr:nth-child(even) td{background:var(--cream);}
+.usd-tag{background:var(--gold-light);color:var(--gold);border-radius:4px;padding:.15rem .4rem;font-size:.75rem;font-weight:700;}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a class="brand" href="index.html"><span class="brand-logo">⚓</span><span class="brand-text">Maritime<span class="accent">CareerIQ</span></span></a>
+  <div class="nav-links"><a href="index.html">Home</a><a href="companies.html">Companies</a><a href="eligibility.html">Eligibility</a><a href="financial.html" class="active">Finance</a><span id="authNav"></span></div>
+</nav>
+<div class="page-header"><h1>💰 Career Financial Planner</h1><p>Complete investment analysis, earnings, savings, and career growth projection for your maritime career</p></div>
+
+<div class="page-wrapper">
+  <div class="fin-grid">
+
+    <!-- INPUTS -->
+    <div class="inputs-panel">
+      <h3>Configure Your Plan</h3>
+      <div class="form-group" style="margin-bottom:1rem"><label>Select Company</label>
+        <select id="f_company" onchange="loadFinancial()"><option value="">Loading…</option></select>
+      </div>
+      <div class="form-group" style="margin-bottom:1rem"><label>Academic Pathway</label>
+        <select id="f_pathway" onchange="recalculate()"><option value="DNS">DNS (12 months)</option><option value="BSc Nautical Science">BSc Nautical Science (36 months)</option></select>
+      </div>
+      <div class="form-group" style="margin-bottom:1rem"><label>USD → INR Rate</label>
+        <input type="number" id="f_rate" value="83" min="70" max="100" oninput="recalculate()"/>
+      </div>
+      <div class="form-group" style="margin-bottom:1.3rem"><label>Monthly Living Expenses on Shore (₹)</label>
+        <input type="number" id="f_living" value="8000" min="3000" max="20000" step="500" oninput="recalculate()"/>
+      </div>
+      <div style="background:var(--teal-light);border-radius:var(--radius-sm);padding:.85rem;font-size:.82rem;color:var(--teal-dark);line-height:1.6">
+        ℹ️ <strong>On Ship:</strong> Food, accommodation, and daily expenses are <strong>fully covered</strong> by the company. Your entire USD stipend goes to savings.
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="financialResults">
+      <div class="empty-state" style="padding:5rem;text-align:center;color:var(--text-muted)">
+        <div style="font-size:4rem">💰</div>
+        <h3 style="margin:1rem 0 .5rem;font-family:var(--font-display);color:var(--navy)">Select a company to see your full financial plan</h3>
+        <p>We'll calculate your complete investment, earnings, savings, and ROI.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CAREER PROGRESSION TABLE (always visible) -->
+  <div style="margin-top:3rem">
+    <h2 style="font-family:var(--font-display);color:var(--navy);margin-bottom:.5rem">📈 Career & Salary Progression</h2>
+    <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem">Industry-wide typical salary ladder for Merchant Navy deck officers (all companies follow similar progression)</p>
+    <div class="table-wrapper">
+      <table class="progression-table">
+        <thead><tr><th>Rank / Position</th><th>Experience</th><th>USD / Month</th><th>INR Approx/Month</th><th>Key Milestone</th></tr></thead>
+        <tbody>
+          <tr><td><strong>DNS Trainee (Shore)</strong></td><td>Year 0–1</td><td>—</td><td>₹28,000–₹50,000 <span class="badge badge-gold" style="font-size:.65rem">Stipend</span></td><td>College + shore training</td></tr>
+          <tr><td><strong>Deck Cadet / OIT</strong></td><td>Year 1–2</td><td><span class="usd-tag">$700–$1,500</span></td><td>₹58,000–₹1,24,500</td><td>First ship! Onboard training begins</td></tr>
+          <tr><td><strong>3rd Officer</strong></td><td>Year 3–5</td><td><span class="usd-tag">$1,600–$3,500</span></td><td>₹1,33,000–₹2,90,000</td><td>Clear CoC exam after OIT contract</td></tr>
+          <tr><td><strong>2nd Officer</strong></td><td>Year 5–8</td><td><span class="usd-tag">$2,500–$5,500</span></td><td>₹2,07,000–₹4,56,000</td><td>Promotion after ~2 yrs as 3rd Officer</td></tr>
+          <tr><td><strong>Chief Officer</strong></td><td>Year 8–12</td><td><span class="usd-tag">$3,800–$8,500</span></td><td>₹3,15,000–₹7,05,000</td><td>Most experienced duty officer</td></tr>
+          <tr><td><strong>Captain / Master</strong></td><td>Year 12+</td><td><span class="usd-tag">$5,800–$12,000</span></td><td>₹4,81,000–₹9,96,000</td><td>Command of the vessel</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-top:.6rem">* USD values are tax-free offshore income. Promotion timelines vary by company (3–6 years typically). Figures are approximate industry averages.</p>
+  </div>
+</div>
+
+<div id="toast"></div>
+<footer class="footer"><div class="footer-inner">
+  <div class="footer-brand">⚓ MaritimeCareerIQ<p>SRM IST DBMS Mini Project</p></div>
+  <div class="footer-links"><a href="companies.html">Companies</a><a href="eligibility.html">Eligibility</a><a href="dashboard.html">Dashboard</a></div>
+</div></footer>
+
+<script src="js/api.js"></script>
+<script>
+setAuthNav('authNav');
+let companies = [], currentFin = null, currentCompany = null;
+
+async function init() {
+  const data = await api('/companies');
+  companies = data.companies;
+  const sel = document.getElementById('f_company');
+  sel.innerHTML = '<option value="">— Select a Company —</option>' +
+    companies.map(c=>`<option value="${c.company_id}">${c.company_name} (${c.country}) — ₹${fmt(c.stipend_dns)}/mo</option>`).join('');
+}
+
+async function loadFinancial() {
+  const id = document.getElementById('f_company').value;
+  if (!id) return;
+  const {company} = await api(`/companies/${id}`);
+  currentCompany = company;
+  currentFin = company.financial;
+  recalculate();
+}
+
+function recalculate() {
+  if (!currentFin || !currentCompany) return;
+  const f        = currentFin;
+  const c        = currentCompany;
+  const rate     = parseFloat(document.getElementById('f_rate').value)||83;
+  const living   = parseFloat(document.getElementById('f_living').value)||8000;
+  const pathway  = document.getElementById('f_pathway').value;
+  const isDNS    = pathway === 'DNS';
+  const courseMo = isDNS ? 12 : 36;
+  const courseFees = isDNS ? (f.dns_college_fees*0.6) : f.dns_college_fees; // BSc costs more
+  const hostelTotal = living * courseMo;
+  const totalInvest = courseFees + hostelTotal + (f.uniform_kit_cost||25000) + (f.books_cost||15000) +
+                      (f.imu_cet_exam_cost||0) + (f.company_exam_cost||0) + (f.medical_exam_cost||8000) +
+                      (f.document_cost||8000) + (f.travel_cost||10000) + (f.miscellaneous||20000);
+
+  const stipendTotal = c.stipend_dns * courseMo;
+  const netInvestment = totalInvest - stipendTotal;
+
+  const oitUSD     = f.onboard_trainee_usd || c.stipend_onboard_trainee || 900;
+  const contractMo = c.minimum_contract_months || 4;
+  const savingsPerContract = oitUSD * contractMo * rate; // All USD goes to savings on ship
+  const waitMo = c.waiting_period_months || 5;
+  const waitCost = living * waitMo;
+  const thirdOfficerExamCost = f.third_officer_exam_cost || 80000;
+  const roi = Math.ceil((netInvestment + waitCost + thirdOfficerExamCost) / (savingsPerContract / contractMo));
+
+  const html = `
+    <h3 style="font-family:var(--font-display);color:var(--navy);margin-bottom:1.3rem">${c.company_name} — Full Financial Plan</h3>
+
+    <!-- PHASE 1: PRE-JOINING -->
+    <div class="card" style="margin-bottom:1.2rem">
+      <h4 style="color:var(--navy);margin-bottom:1rem">📚 Phase 1: Pre-Joining Investment</h4>
+      <div class="cost-row"><span class="k">${isDNS?'DNS':'BSc NS'} College Fees (${courseMo} months)</span><span class="v">₹${fmt(Math.round(courseFees))}</span></div>
+      <div class="cost-row"><span class="k">Hostel + Living (₹${fmt(living)}/mo × ${courseMo}mo)</span><span class="v">₹${fmt(Math.round(hostelTotal))}</span></div>
+      <div class="cost-row"><span class="k">Uniform, Kit & Gear</span><span class="v">₹${fmt(f.uniform_kit_cost||25000)}</span></div>
+      <div class="cost-row"><span class="k">Books & Study Material</span><span class="v">₹${fmt(f.books_cost||15000)}</span></div>
+      <div class="cost-row"><span class="k">IMU-CET Exam Fee</span><span class="v">₹${fmt(f.imu_cet_exam_cost||0)}</span></div>
+      <div class="cost-row"><span class="k">Company Exam / CBT Fee</span><span class="v">₹${fmt(f.company_exam_cost||0)}</span></div>
+      <div class="cost-row"><span class="k">Medical Examination (${c.medical_standard})</span><span class="v">₹${fmt(f.medical_exam_cost||8000)}</span></div>
+      <div class="cost-row"><span class="k">Documents (Passport, CDC, SID, INDOS…)</span><span class="v">₹${fmt(f.document_cost||8000)}</span></div>
+      <div class="cost-row"><span class="k">Travel (Interviews, College Join)</span><span class="v">₹${fmt(f.travel_cost||10000)}</span></div>
+      <div class="cost-row"><span class="k">Miscellaneous</span><span class="v">₹${fmt(f.miscellaneous||20000)}</span></div>
+      <div class="total-band"><span class="lbl">Gross Investment Before Stipend</span><span class="val">₹${fmt(Math.round(totalInvest))}</span></div>
+      <div style="background:var(--success-bg);border-radius:var(--radius-sm);padding:.75rem 1rem;margin-top:.7rem;display:flex;justify-content:space-between;font-size:.88rem">
+        <span style="color:var(--success)">✅ Company DNS Stipend (₹${fmt(c.stipend_dns)}/mo × ${courseMo}mo)</span>
+        <strong style="color:var(--success)">− ₹${fmt(stipendTotal)}</strong>
+      </div>
+      <div style="background:var(--navy);color:var(--white);border-radius:var(--radius-sm);padding:.9rem 1.1rem;margin-top:.5rem;display:flex;justify-content:space-between;font-weight:700;font-size:1rem">
+        <span>Net Investment (after stipend offset)</span>
+        <span style="font-family:var(--font-display);font-size:1.2rem">₹${fmt(Math.round(netInvestment))}</span>
+      </div>
+    </div>
+
+    <!-- PHASE 2: WAITING -->
+    <div class="card" style="margin-bottom:1.2rem">
+      <h4 style="color:var(--navy);margin-bottom:1rem">⏳ Phase 2: Waiting Period (${c.waiting_period_months} months after DNS)</h4>
+      <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.8rem">After completing DNS/BSc, you wait at home before joining your first ship. The company processes your documents and finds a vessel.</p>
+      <div class="cost-row"><span class="k">Living Expenses at Home (₹${fmt(living)}/mo × ${c.waiting_period_months}mo)</span><span class="v" style="color:var(--danger)">₹${fmt(Math.round(waitCost))}</span></div>
+      <div class="cost-row"><span class="k">BST / Pre-Sea Training Certificates</span><span class="v" style="color:var(--danger)">₹15,000–₹25,000</span></div>
+    </div>
+
+    <!-- PHASE 3: ONBOARD -->
+    <div class="earnings-card">
+      <h4>🚢 Phase 3: First Ship Contract (${contractMo}–${c.maximum_contract_months} months onboard)</h4>
+      <div class="earn-row"><span class="ek">Monthly USD Stipend (Deck Cadet / OIT)</span><span class="ev">$${fmt(oitUSD)}/mo <span class="badge badge-gold" style="font-size:.65rem">Tax-Free</span></span></div>
+      <div class="earn-row"><span class="ek">In INR (@ ₹${rate}/USD)</span><span class="ev">₹${fmt(Math.round(oitUSD*rate))}/mo</span></div>
+      <div class="earn-row"><span class="ek">On-Ship Expenses (Food, Room)</span><span class="ev" style="color:#86efac">₹0 — Fully Covered</span></div>
+      <div class="earn-row"><span class="ek">Savings per Month</span><span class="ev" style="color:#86efac">₹${fmt(Math.round(oitUSD*rate))}/mo (100%)</span></div>
+      <div class="earn-row"><span class="ek">Total Savings (${contractMo}-month contract)</span><span class="ev" style="color:#6ee7b7;font-size:1.1rem;font-family:var(--font-display)">₹${fmt(Math.round(savingsPerContract))}</span></div>
+    </div>
+
+    <!-- PHASE 4: AFTER FIRST CONTRACT -->
+    <div class="card" style="margin-bottom:1.2rem">
+      <h4 style="color:var(--navy);margin-bottom:1rem">🎓 Phase 4: After First Contract — 3rd Officer Certification</h4>
+      <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:.8rem">After your first sea service, you appear for MMD / CoC (Certificate of Competency) exams to become 3rd Officer.</p>
+      <div class="cost-row"><span class="k">CoC / MMD Exam Fees</span><span class="v" style="color:var(--danger)">₹${fmt(f.third_officer_exam_cost||80000)}</span></div>
+      <div class="cost-row"><span class="k">Study Material, Coaching</span><span class="v" style="color:var(--danger)">₹20,000–₹40,000</span></div>
+      <div class="cost-row"><span class="k">Living During Study (3–4 months)</span><span class="v" style="color:var(--danger)">₹${fmt(living*4)}</span></div>
+    </div>
+
+    <!-- NET SAVINGS -->
+    <div class="green-band">
+      <h4>💰 Net Savings After First Full Cycle</h4>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+        <div>
+          <div class="green-val">₹${fmt(Math.round(savingsPerContract - waitCost - (f.third_officer_exam_cost||80000) - (living*4)))}</div>
+          <div style="font-size:.82rem;color:var(--success)">Estimated net savings after full cycle (investment already recovered)</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:.88rem;font-weight:700;color:var(--success)">ROI: ~${roi} months</div>
+          <div style="font-size:.75rem;color:var(--success)">Months to recover total investment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEXT CONTRACTS -->
+    <div class="card" style="margin-top:1.2rem">
+      <h4 style="color:var(--navy);margin-bottom:.8rem">🔮 Projection: As You Rise in Rank</h4>
+      <div class="earn-row" style="padding:.5rem 0;border-bottom:1px solid var(--cream-mid);font-size:.88rem;display:flex;justify-content:space-between"><span style="color:var(--text-mid)">3rd Officer (after 3 yrs)</span><span style="font-weight:700">$1,600–$3,500/mo ≈ ₹${fmt(Math.round(2500*rate))}/mo</span></div>
+      <div class="earn-row" style="padding:.5rem 0;border-bottom:1px solid var(--cream-mid);font-size:.88rem;display:flex;justify-content:space-between"><span style="color:var(--text-mid)">2nd Officer (after 5 yrs)</span><span style="font-weight:700">$2,500–$5,500/mo ≈ ₹${fmt(Math.round(4000*rate))}/mo</span></div>
+      <div class="earn-row" style="padding:.5rem 0;border-bottom:1px solid var(--cream-mid);font-size:.88rem;display:flex;justify-content:space-between"><span style="color:var(--text-mid)">Chief Officer (after 8 yrs)</span><span style="font-weight:700">$3,800–$8,500/mo ≈ ₹${fmt(Math.round(6000*rate))}/mo</span></div>
+      <div class="earn-row" style="padding:.5rem 0;font-size:.88rem;display:flex;justify-content:space-between"><span style="color:var(--text-mid)">Captain (after 12 yrs)</span><span style="font-weight:700;color:var(--gold)">$5,800–$12,000/mo ≈ ₹${fmt(Math.round(9000*rate))}/mo 🏆</span></div>
+      <p style="font-size:.75rem;color:var(--text-muted);margin-top:.8rem">* All figures are Tax-Free offshore income (DTAA benefits apply for Indian seafarers with valid CDC + sea service proof)</p>
+    </div>`;
+
+  document.getElementById('financialResults').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

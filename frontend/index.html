@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MaritimeCareerIQ — Merchant Navy Sponsorship Intelligence</title>
+<link rel="stylesheet" href="css/global.css"/>
+<style>
+.hero{background:linear-gradient(150deg,var(--navy) 0%,var(--navy-mid) 55%,#1e4d8c 100%);min-height:88vh;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:70px;background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%);}
+.hero-body{flex:1;display:flex;align-items:center;max-width:1200px;margin:0 auto;padding:4rem 2.5rem;gap:5rem;width:100%;}
+.hero-text{flex:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.32rem .95rem;font-size:.83rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:1.1rem;}
+.hero h1{color:var(--white);margin-bottom:1rem;}
+.hero-sub{color:rgba(255,255,255,.7);font-size:1rem;max-width:480px;margin-bottom:2.2rem;line-height:1.7;}
+.hero-btns{display:flex;gap:.8rem;margin-bottom:2.5rem;flex-wrap:wrap;}
+.hero-btns .btn-white{background:var(--white);color:var(--navy);border:none;border-radius:var(--radius-sm);padding:.65rem 1.4rem;font-size:.92rem;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:var(--transition);}
+.hero-btns .btn-white:hover{background:var(--cream);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,255,255,.2);}
+.hero-btns .btn-ghost{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.35);border-radius:var(--radius-sm);padding:.65rem 1.4rem;font-size:.92rem;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:var(--transition);}
+.hero-btns .btn-ghost:hover{background:rgba(255,255,255,.1);}
+.hero-stats{display:flex;gap:2.5rem;border-top:1px solid rgba(255,255,255,.15);padding-top:1.3rem;flex-wrap:wrap;}
+.hstat .n{font-family:var(--font-display);font-size:1.75rem;font-weight:800;color:var(--white);}
+.hstat .l{color:rgba(255,255,255,.5);font-size:.76rem;margin-top:.1rem;}
+.hero-visual{flex:0 0 340px;display:flex;align-items:center;justify-content:center;}
+.ship-scene{position:relative;width:300px;height:220px;}
+.ship-emoji{font-size:86px;position:absolute;top:15px;left:50%;transform:translateX(-50%);animation:rock 4s ease-in-out infinite;filter:drop-shadow(0 6px 20px rgba(0,0,0,.3));}
+@keyframes rock{0%,100%{transform:translateX(-50%) rotate(-2deg)}50%{transform:translateX(-50%) rotate(2deg) translateY(-7px)}}
+.wave{position:absolute;bottom:0;left:0;right:0;border-radius:60% 60% 0 0;animation:wv 3s ease-in-out infinite;}
+.w1{height:52px;background:rgba(255,255,255,.18);}
+.w2{height:42px;background:rgba(255,255,255,.11);animation-delay:.4s;}
+.w3{height:32px;background:rgba(255,255,255,.06);animation-delay:.8s;}
+@keyframes wv{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+/* Features */
+.features-sect{background:var(--cream);padding:5rem 2.5rem;}
+.sect-head{text-align:center;margin-bottom:2.8rem;}
+.sect-head h2{color:var(--navy);}
+.sect-head p{color:var(--text-mid);margin-top:.5rem;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1.4rem;max-width:1100px;margin:0 auto;}
+.feat-card{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:1.8rem;transition:var(--transition);}
+.feat-card:hover{border-color:var(--teal-dark);box-shadow:var(--card-shadow-lg);transform:translateY(-3px);}
+.feat-icon{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1rem;}
+.fi-b{background:var(--info-bg);}.fi-g{background:var(--success-bg);}.fi-y{background:var(--gold-light);}.fi-t{background:var(--teal-light);}
+.feat-card h3{color:var(--navy);margin-bottom:.4rem;font-family:var(--font-body);font-size:1rem;font-weight:700;}
+.feat-card p{color:var(--text-mid);font-size:.85rem;line-height:1.6;}
+.feat-link{color:var(--teal-dark);font-weight:600;font-size:.83rem;display:inline-block;margin-top:.7rem;}
+/* Strip */
+.strip{background:var(--navy);padding:2.2rem;text-align:center;}
+.strip-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:1.5rem;}
+.strip-stat .n{font-family:var(--font-display);font-size:2.2rem;font-weight:800;color:var(--white);}
+.strip-stat .l{color:rgba(255,255,255,.5);font-size:.78rem;margin-top:.15rem;}
+/* Auth */
+.auth-wrap{background:var(--cream-dark);padding:3.5rem 1.5rem;border-top:1.5px solid var(--card-border);}
+.auth-box{background:var(--white);border:1.5px solid var(--card-border);border-radius:var(--radius);padding:2.2rem;max-width:680px;margin:0 auto;box-shadow:var(--card-shadow-lg);}
+.auth-box.sm{max-width:450px;}
+.auth-head{text-align:center;margin-bottom:1.8rem;}
+.auth-head h2{color:var(--navy);}
+.auth-head p{color:var(--text-mid);margin-top:.25rem;font-size:.9rem;}
+.form-g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-g2 .full{grid-column:1/-1;}
+.demo-note{background:var(--teal-light);border:1px solid rgba(8,145,178,.2);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.82rem;color:var(--teal-dark);margin-bottom:1.2rem;line-height:1.75;}
+.demo-note code{background:rgba(8,145,178,.15);padding:.08rem .32rem;border-radius:3px;font-size:.79rem;}
+.auth-switch{text-align:center;color:var(--text-muted);font-size:.83rem;margin-top:.9rem;}
+.auth-switch a{color:var(--teal-dark);font-weight:600;}
+@media(max-width:900px){.hero-visual{display:none;}.hero-body{gap:2rem;}}
+@media(max-width:600px){.hero-body{flex-direction:column;text-align:center;padding:2rem 1rem;}.hero-btns{justify-content:center;}.hero-stats{justify-content:center;}.form-g2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="brand" href="index.html"><span class="brand-logo">⚓</span><span class="brand-text">Maritime<span class="accent">CareerIQ</span></span></a>
+  <div class="nav-links" id="mainNav">
+    <a href="companies.html">Companies</a>
+    <a href="eligibility.html">Eligibility</a>
+    <a href="financial.html">Finance</a>
+    <a href="#" onclick="showAuth('loginWrap')">Login</a>
+    <button class="btn btn-primary btn-sm" onclick="showAuth('registerWrap')">Register Free</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="hero-body">
+    <div class="hero-text">
+      <div class="hero-tag">🚢 India's #1 Merchant Navy Career Platform</div>
+      <h1>Your Complete<br>Maritime Career<br><em style="font-style:italic;color:#93c5fd">Intelligence Hub</em></h1>
+      <p class="hero-sub">Check eligibility across 30+ companies, get full financial planning, track application deadlines, and navigate your path to the sea — all free.</p>
+      <div class="hero-btns">
+        <button class="btn-white" onclick="showAuth('registerWrap')">Get Started Free →</button>
+        <button class="btn-ghost" onclick="showAuth('loginWrap')">Sign In</button>
+        <a href="companies.html" class="btn-ghost" style="text-decoration:none;display:inline-flex;align-items:center">Browse Companies</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="n">30+</div><div class="l">Companies</div></div>
+        <div class="hstat"><div class="n">₹28K–₹50K</div><div class="l">DNS Stipend</div></div>
+        <div class="hstat"><div class="n">$700–$1500</div><div class="l">Onboard USD</div></div>
+        <div class="hstat"><div class="n">₹3–6L</div><div class="l">Savings/Contract</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="ship-scene">
+        <div class="ship-emoji">🚢</div>
+        <div class="wave w1"></div><div class="wave w2"></div><div class="wave w3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-sect">
+  <div class="sect-head"><h2>Everything You Need to Join the Merchant Navy</h2><p>From eligibility to captain salary — every detail in one place.</p></div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon fi-b">✅</div><h3>Smart Eligibility Checker</h3><p>Check PCM, 10th/12th, eyesight, IMU-CET, swimming, medical status — all criteria across 30 companies instantly.</p><a href="eligibility.html" class="feat-link">Check Eligibility →</a></div>
+    <div class="feat-card"><div class="feat-icon fi-g">💰</div><h3>Complete Financial Planner</h3><p>Total investment, DNS stipend, onboard savings, contract earnings, 3rd officer exam costs — full career finance timeline.</p><a href="financial.html" class="feat-link">Plan Finances →</a></div>
+    <div class="feat-card"><div class="feat-icon fi-y">🏢</div><h3>30+ Company Profiles</h3><p>Fleet details, selection process steps, approved medical doctors, partner colleges, salary ladder — full company dossiers.</p><a href="companies.html" class="feat-link">Explore Companies →</a></div>
+    <div class="feat-card"><div class="feat-icon fi-t">⏰</div><h3>Deadline Alert System</h3><p>Track which forms are Open Now 🟢, Upcoming 🟡, or Closed 🔴. Never miss a sponsorship window again.</p><a href="companies.html" class="feat-link">View Deadlines →</a></div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <div class="strip-stat"><div class="n">30+</div><div class="l">Companies Listed</div></div>
+    <div class="strip-stat"><div class="n">12</div><div class="l">Partner Colleges</div></div>
+    <div class="strip-stat"><div class="n">~16mo</div><div class="l">Avg ROI Period</div></div>
+    <div class="strip-stat"><div class="n">$9–12K</div><div class="l">Captain Salary/mo</div></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="registerWrap" class="auth-wrap hidden">
+  <div class="auth-box">
+    <div class="auth-head"><span style="font-size:2.2rem">⚓</span><h2 style="margin-top:.4rem">Create Your Account</h2><p>Join the Maritime Career Intelligence Platform</p></div>
+    <form onsubmit="handleRegister(event)">
+      <div class="form-g2">
+        <div class="form-group"><label>Full Name *</label><input id="r_name" placeholder="Arjun Sharma" required/></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="r_email" placeholder="you@email.com" required/></div>
+        <div class="form-group"><label>Password *</label><input type="password" id="r_pass" placeholder="Min 6 chars" required minlength="6"/></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="r_phone" placeholder="9876543210"/></div>
+        <div class="form-group"><label>Age *</label><input type="number" id="r_age" placeholder="18" min="15" max="35" required/></div>
+        <div class="form-group"><label>Gender *</label><select id="r_gender" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-group"><label>City</label><input id="r_city" placeholder="Mumbai"/></div>
+        <div class="form-group"><label>State</label><input id="r_state" placeholder="Maharashtra"/></div>
+        <div class="form-group full"><label>Institute *</label><input id="r_inst" placeholder="MERI Mumbai / IMU Chennai…" required/></div>
+        <div class="form-group full"><label>Academic Pathway *</label><select id="r_pathway" required><option value="">Select</option><option value="DNS">DNS (Diploma in Nautical Science)</option><option value="BSc Nautical Science">BSc Nautical Science</option></select></div>
+        <div class="form-group"><label>PCM % *</label><input type="number" id="r_pcm" placeholder="75.5" min="40" max="100" step="0.01" required/></div>
+        <div class="form-group"><label>10th %</label><input type="number" id="r_10th" placeholder="82.0" step="0.01"/></div>
+        <div class="form-group"><label>12th %</label><input type="number" id="r_12th" placeholder="79.0" step="0.01"/></div>
+        <div class="form-group"><label>10th English %</label><input type="number" id="r_10en" placeholder="75.0" step="0.01"/></div>
+        <div class="form-group"><label>12th English %</label><input type="number" id="r_12en" placeholder="72.0" step="0.01"/></div>
+        <div class="form-group"><label>IMU-CET Rank</label><input type="number" id="r_imu" placeholder="Optional — leave blank if not appeared"/></div>
+        <div class="form-group"><label>Eyesight (diopters) *</label><input type="number" id="r_eye" placeholder="0=perfect · 1.5=mild glasses · 3=strong" min="0" max="6" step="0.5" required/></div>
+        <div class="form-group"><label>Medical Status *</label><select id="r_med" required><option value="">Select</option><option value="Fit">Fit (Medical Done &amp; Passed)</option><option value="Pending">Pending (Not Done Yet)</option><option value="Unfit">Unfit</option></select></div>
+        <div class="form-group full"><label class="checkbox-label"><input type="checkbox" id="r_swim"/><span>Swimming Certified</span></label></div>
+      </div>
+      <div id="regMsg" class="hidden"></div>
+      <button type="submit" class="btn btn-primary btn-full mt-2" id="regBtn">Create Account →</button>
+      <p class="auth-switch">Already registered? <a href="#" onclick="showAuth('loginWrap')">Sign in here</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginWrap" class="auth-wrap hidden">
+  <div class="auth-box sm">
+    <div class="auth-head"><span style="font-size:2.2rem">⚓</span><h2 style="margin-top:.4rem">Welcome Back</h2><p>Sign in to your account</p></div>
+    <div class="demo-note">
+      <strong>Demo Accounts (password: <code>password123</code>)</strong><br/>
+      <code>arjun@maritime.com</code> — Good profile, eligible most companies<br/>
+      <code>priya@maritime.com</code> — Excellent profile, Rank 85, Selected by Maersk<br/>
+      <code>vivek@maritime.com</code> — Low profile, Pending medical, no IMU rank<br/>
+      <code>ananya@maritime.com</code> — Top scorer, Rank 42, eligible all top companies
+    </div>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group"><label>Email *</label><input type="email" id="l_email" placeholder="you@email.com" required/></div>
+      <div class="form-group mt-1"><label>Password *</label><input type="password" id="l_pass" placeholder="Your password" required/></div>
+      <div id="loginMsg" class="hidden"></div>
+      <button type="submit" class="btn btn-primary btn-full mt-2" id="loginBtn">Sign In →</button>
+      <p class="auth-switch">Don't have an account? <a href="#" onclick="showAuth('registerWrap')">Register free</a></p>
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">⚓ MaritimeCareerIQ<p>Maritime Sponsorship & Career Intelligence System<br/>SRM IST — DBMS Mini Project</p></div>
+    <div class="footer-links"><a href="companies.html">Companies</a><a href="eligibility.html">Eligibility</a><a href="financial.html">Finance</a><a href="dashboard.html">Dashboard</a></div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+// Redirect if already logged in
+if(localStorage.getItem('maritime_token')){
+  document.getElementById('mainNav').insertAdjacentHTML('beforeend',`<a href="dashboard.html" class="btn btn-primary btn-sm">My Dashboard →</a>`);
+}
+
+function showAuth(id){
+  ['heroSection','registerWrap','loginWrap'].forEach(s=>{const el=document.getElementById(s);if(el)el.classList.add('hidden');});
+  const el=document.getElementById(id);if(el){el.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
+}
+
+async function handleRegister(e){
+  e.preventDefault();
+  const btn=document.getElementById('regBtn');btn.disabled=true;btn.textContent='Creating…';
+  const body={
+    name:document.getElementById('r_name').value.trim(),
+    email:document.getElementById('r_email').value.trim(),
+    password:document.getElementById('r_pass').value,
+    phone:document.getElementById('r_phone').value||null,
+    age:parseInt(document.getElementById('r_age').value),
+    gender:document.getElementById('r_gender').value,
+    city:document.getElementById('r_city').value||null,
+    state:document.getElementById('r_state').value||null,
+    institute:document.getElementById('r_inst').value.trim(),
+    academic_pathway:document.getElementById('r_pathway').value,
+    pcm_percentage:parseFloat(document.getElementById('r_pcm').value),
+    tenth_percentage:document.getElementById('r_10th').value||null,
+    twelfth_percentage:document.getElementById('r_12th').value||null,
+    tenth_english:document.getElementById('r_10en').value||null,
+    twelfth_english:document.getElementById('r_12en').value||null,
+    imu_cet_rank:document.getElementById('r_imu').value||null,
+    eyesight:parseFloat(document.getElementById('r_eye').value),
+    medical_status:document.getElementById('r_med').value,
+    swimming_certified:document.getElementById('r_swim').checked,
+  };
+  try{
+    const data=await api('/students/register',{method:'POST',body:JSON.stringify(body)});
+    localStorage.setItem('maritime_token',data.token);
+    localStorage.setItem('maritime_user',JSON.stringify(data.student));
+    showMsg('regMsg','✅ Account created! Redirecting to dashboard…','success');
+    document.getElementById('regMsg').classList.remove('hidden');
+    setTimeout(()=>location.href='dashboard.html',1300);
+  }catch(err){
+    showMsg('regMsg',err.message||'Registration failed.','error');
+    document.getElementById('regMsg').classList.remove('hidden');
+    btn.disabled=false;btn.textContent='Create Account →';
+  }
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById('loginBtn');btn.disabled=true;btn.textContent='Signing in…';
+  try{
+    const data=await api('/students/login',{method:'POST',body:JSON.stringify({
+      email:document.getElementById('l_email').value.trim(),
+      password:document.getElementById('l_pass').value
+    })});
+    localStorage.setItem('maritime_token',data.token);
+    localStorage.setItem('maritime_user',JSON.stringify(data.student));
+    showMsg('loginMsg','✅ Login successful! Redirecting…','success');
+    document.getElementById('loginMsg').classList.remove('hidden');
+    setTimeout(()=>location.href='dashboard.html',1000);
+  }catch(err){
+    showMsg('loginMsg',err.message||'Login failed. Check credentials.','error');
+    document.getElementById('loginMsg').classList.remove('hidden');
+    btn.disabled=false;btn.textContent='Sign In →';
+  }
+}
+</script>
+</body>
+</html>
